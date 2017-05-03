@@ -7,6 +7,7 @@ package it.polito.tdp.borders;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.borders.model.Border;
 import it.polito.tdp.borders.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,7 +33,11 @@ public class BordersController {
 	@FXML
 	void doCalcolaConfini(ActionEvent event) {
 
-		txtResult.setText("Todo!");
+		txtResult.setText(model.doCalcolaConfini(txtAnno.getText()));
+	}
+	
+	public void setModel(Model model){
+		this.model=model;
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
