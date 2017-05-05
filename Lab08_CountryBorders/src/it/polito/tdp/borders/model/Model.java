@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.graph.SimpleGraph;
 
 import it.polito.tdp.borders.db.BordersDAO;
@@ -16,7 +17,7 @@ public class Model {
 
 	public Model() {
 		
-		graph = new SimpleGraph <Country, Border> (Border.class);
+		//graph = new SimpleGraph <Country, Border> (Border.class);
 		dao = new BordersDAO();
 	}
 
@@ -35,6 +36,8 @@ public class Model {
 	
 	public void generaGrafo (List<Border> borders){
 		
+		graph = new SimpleGraph <Country, Border> (Border.class);
+		
 		for(Border b : borders){
 			Country c1 = b.getC1();
 			Country c2 = b.getC2();
@@ -51,10 +54,25 @@ public class Model {
 		
 		String ris = "";
 		
+		ris += calcolaComponentiConnesse() + "\n";
+		
 		for(Country vertex : graph.vertexSet())
-			ris += vertex.toString() + " Numero stati confinanti: " + Graphs.neighborListOf(graph, vertex).size() + "\n";
+			ris += vertex.toString() + " Numero stati confinanti: " + graph.degreeOf(vertex) + "\n";
 		
 		return ris.trim();
+	}
+	
+	public String calcolaComponentiConnesse(){
+		
+		String ris = "";
+		
+		ConnectivityInspector<Country,Border> ci = new ConnectivityInspector<Country,Border>(graph);
+		
+		int numComponentiConnesse = ci.connectedSets().size();
+		
+		ris += "Numero componenti connesse nel grafo: " + numComponentiConnesse;
+		
+		return ris;
 	}
 
 }
